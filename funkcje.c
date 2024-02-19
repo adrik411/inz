@@ -2,7 +2,7 @@
  * funkcje.c
  *
  * Created: 29/12/2023 09:24:41
- *  Author: guzik
+ *  Author: ak
  */ 
 #include <avr/delay.h>
 #include <avr/sleep.h>
@@ -73,12 +73,8 @@ void init_timer_licznik_hz(){
 
 void init_timer(){
 	
-	//OCR1AH = 0xF3;
-	//OCR1AL = 0x2f;
 	OCR1AH = 0xF4;
 	OCR1AL = 0x3b;
-	//OCR1AH = 0xf0;
-	//OCR1AL = 0x2a; // 62500 max aby liczylo co sekunde
 	TCCR1B |= (1<<WGM12) | (1<<CS12);  // 16 mhz / 256 = 62500
 	TIMSK1 |= (1<<OCIE1A);
 	
@@ -86,14 +82,12 @@ void init_timer(){
 
 void enable_int0(){
 	
-	// jedna operacja niem usz eblokowac ATOMIC
 	EIMSK |= (1<<INT0);
 	
 }
 
 void disable_int0(){
 	
-	// jedna operacja niem usz eblokowac ATOMIC
 	EIMSK &= ~(1<<INT0);
 	
 }
@@ -129,12 +123,12 @@ uint16_t ReadADC(uint8_t ADCchannel)
 	   return ADC;
 	}
 }
-
-void WDT_off(void) // to dziala jak chce i nie myli w przeciwienstwie do wdt_disable
+/*
+void WDT_off(void) 
 {
 	asm volatile(
 	"cli"      "\n\t"
-	"push r16" "\n\t" // bo nwm czy jest uzywane gdzies wiec musze dodac na stacka
+	"push r16" "\n\t" //  gdzies uzywane wiec musze dodac na stacka
 	"wdr"      "\n\t"
 	"in r16, 0x34" "\n\t"
 	"andi r16, (0xff & (0 << 3))" "\n\t"
@@ -146,10 +140,10 @@ void WDT_off(void) // to dziala jak chce i nie myli w przeciwienstwie do wdt_dis
 	"sts 0x60, r16" "\n\t"
 	"pop r16"  "\n\t"
 	"sei" "\n\t"
-	//"ret" "\n\t"
+	"ret" "\n\t"
 	);
 }
-
+*/
 float pomiar_adc_usredniony(uint8_t kanal, uint16_t ile_razy){
 	
 	float srednia = 0;
@@ -157,7 +151,7 @@ float pomiar_adc_usredniony(uint8_t kanal, uint16_t ile_razy){
 	for(uint16_t i = 0; i<ile_razy; i++){
 		
 		_delay_us(25);
-		float vbg = (VZAS/1024) * ReadADC(kanal); //avcc okolo 4.97v
+		float vbg = (VZAS/1024) * ReadADC(kanal);
 		srednia = srednia + vbg;
 		
 	}
@@ -183,7 +177,7 @@ float hz_na_um_al(int32_t x){
 
 int16_t kalibracja_0_um_fe(int16_t blad,float um){
 	
-	if(um < 0) um = 0; // czasami wychodzi wynik pomiaru poni¿ej 0 um
+	if(um < 0) um = 0; // czasami wychodzi wynik pomiaru poniÅ¼ej 0 um
 	
 	float x = um;
 	
@@ -199,7 +193,7 @@ int16_t kalibracja_0_um_fe(int16_t blad,float um){
 
 int16_t kalibracja_0_um_al(int16_t blad,float um){
 	
-	if(um < 0) um = 0; // czasami wychodzi wynik pomiaru poni¿ej 0 um
+	if(um < 0) um = 0; // czasami wychodzi wynik pomiaru poniÅ¼ej 0 um
 	
 	float x = um;
 	

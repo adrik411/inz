@@ -1,1 +1,2 @@
-![obraz](https://github.com/adrik411/inz/assets/160449431/24c7e51f-c030-4a93-a12a-d4e62635be29)
+![obraz](https://github.com/adrik411/inz/assets/160449431/cd5c3fb7-4245-47e5-8ef5-f25530732711)
+Schemat układu

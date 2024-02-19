@@ -24,11 +24,11 @@
 #include "funkcje.h"
 #include "usart.h"
 #include "OnLCDLib.h"
-#include "menu.h"
 
 
-const uint32_t zero_um_fabrycznie_fe = 92378; // pointer dziala jak const_cast
+const uint32_t zero_um_fabrycznie_fe = 92378; 
 const uint32_t zero_um_fabrycznie_al = 119470;
+
 volatile uint32_t HZ_prostokata = 0;
 volatile uint32_t HZ_prostokata_ost = 0;
 volatile uint32_t wart_kalibracja_powietrze = 0;
@@ -39,13 +39,16 @@ volatile uint8_t toggle = 0;
 volatile uint8_t t0 = 0;
 volatile char buffer [sizeof(uint32_t)*8+1];
 volatile uint32_t startowe_HZ_prostokata = 0;
+
 int16_t kompensacja_hz = 0;
+
 float startowy_pomiar_adc = 0.0;
 float pomiar_vzas = 0.0;
 float pomiar_adc = 0.0;
 float roznica_adc = 0.0;
 float um = 0;
 int32_t pomiar_2_c = 0;
+
 volatile uint16_t blad_zero_al = 0;
 volatile uint16_t blad_zero_fe = 0;
 
@@ -68,21 +71,19 @@ int main(void)
     { 
 		wdt_reset();
 
-		if(toggle){
+		if(toggle){ // toggle dla licznika
 			
 	        toggle = !(toggle);
-			if(!(startowe_HZ_prostokata) && pomiar_2 > 98500) startowe_HZ_prostokata = pomiar_2;
-			if(!(startowy_pomiar_adc)) startowy_pomiar_adc = pomiar_adc_usredniony(1,500);
+			if(!(startowe_HZ_prostokata) && pomiar_2 > 98500) startowe_HZ_prostokata = pomiar_2; // dla debugowania zapisuje początkową częstotlwiość
+			if(!(startowy_pomiar_adc)) startowy_pomiar_adc = pomiar_adc_usredniony(1,500); // dla debugowania zapisuje początkowe napięcie na wejściu analogowym (termistor)
 			
 			pomiar_adc = pomiar_adc_usredniony(1,500);
-			roznica_adc = startowy_pomiar_adc - pomiar_adc;
+			roznica_adc = startowy_pomiar_adc - pomiar_adc; // od startowego pomiaru termistora robi róznice i na podstawie jej zmiany kompensuje Hz
 			
-///////////////////////////////////////// zrob to jako funkcje
-            kompensacja_temp(roznica_adc, &kompensacja_hz);
-////////////////////////////////////////////	
+                kompensacja_temp(roznica_adc, &kompensacja_hz);
 
 			
-			if(pomiar_2 <= (96969)){
+			if(pomiar_2 <= (96969)){ // wykryta stal 
 				
 				pomiar_2_c = pomiar_2 - (96969);
 				um = hz_na_um_fe(abs(pomiar_2_c+kompensacja_hz));
@@ -90,7 +91,7 @@ int main(void)
 				um = hz_na_um_fe(abs(pomiar_2_c+blad+kompensacja_hz));
 				printf("FE %d | ",blad);
 			}
-			else if (pomiar_2 >= (106700))
+			else if (pomiar_2 >= (106700)) // wykryte aluminium / miedź
 			{
 				
 				pomiar_2_c = pomiar_2 - (106700);
@@ -118,12 +119,12 @@ int main(void)
     }
 }
 
-ISR(TIMER1_COMPA_vect){ // MA BYC TU JAK NAJMNIEJ
+ISR(TIMER1_COMPA_vect){ // co 1 sekundę się liczy
 	
 	toggle = !(toggle);
 
 	  if(toggle){
-		  pomiar_2 = (zapetlono_tyle*255) + t0; // blad zapetlono tyle ???
+		  pomiar_2 = (zapetlono_tyle*255) + t0; 
 		  zapetlono_tyle = 0;
 	  }
 	t0 = TCNT0;
@@ -131,7 +132,7 @@ ISR(TIMER1_COMPA_vect){ // MA BYC TU JAK NAJMNIEJ
 	
 }
 
-ISR(INT0_vect){ // liczy czestotliwosc prostokatnego sygnalu
+ISR(INT0_vect){ // kalibracaja punktu zero um
 	
 	if(pomiar_2 <= (96969)) // fe
 	{
@@ -151,7 +152,7 @@ ISR(INT0_vect){ // liczy czestotliwosc prostokatnego sygnalu
 	
 }
 
-ISR(TIMER0_OVF_vect){
+ISR(TIMER0_OVF_vect){ // licznik pod który podpięty jest komparator LM393P
 	
 	zapetlono_tyle++;
 	

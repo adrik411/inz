@@ -1,8 +1,8 @@
 /*
- * proj_inz.c
+ * main.c
  *
  * Created: 28/12/2023 03:40:34
- * Author : guzik
+ * Author : ak
  */ 
 
 #define F_CPU 16000000UL

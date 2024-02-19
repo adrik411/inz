@@ -23,7 +23,6 @@
 #include <math.h>
 #include "funkcje.h"
 #include "usart.h"
-#include "OnLCDLib.h"
 
 
 const uint32_t zero_um_fabrycznie_fe = 92378; 

@@ -1,5 +1,5 @@
 /*
- * sart.c
+ * usart.c
  *
  * Created: 29/12/2023 09:23:22
  *  Author: ak

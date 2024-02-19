@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include "usart.h"
 
-void USART_Init(unsigned int ubrr) // 9600 dla 8mhz jest niby git ALE korzytam z wewn oscylatora który jest mniej stabilny
+void USART_Init(unsigned int ubrr) 
 {
 	/*Set baud rate */
 	UBRR0H = (unsigned char)(ubrr>>8);
@@ -51,11 +51,7 @@ void USART_Transmit_arr(unsigned char *data, uint8_t dlugosc)
 		/* Put data into buffer, sends the data */
 		UDR0 = data[i];
 		
-		//if(data[i] == 0) break; // endline
-		
 	}
-	//while (!(UCSR0A & (1<<UDRE0)));
-	//UDR0 = i;
 
 }
 

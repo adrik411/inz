@@ -1,8 +1,8 @@
 /*
- * moj_usart.h
+ * usart.h
  *
- * Created: 06.04.2023 22:57:11
- *  Author: guzik
+ *  Created: 29/12/2023 09:23:11
+ *  Author: ak
  */ 
 
 
@@ -13,7 +13,7 @@
 #define BAUD 38400 // ???
 #define MYUBRR FOSC/16/BAUD-1
 
-void USART_Init(unsigned int ubrr); // 9600 dla 8mhz jest niby git ALE korzytam z wewn oscylatora który jest mniej stabilny
+void USART_Init(unsigned int ubrr); // 9600 dla 8mhz jest niby git ALE korzytam z wewn oscylatora ktÃ³ry jest mniej stabilny
 
 
 unsigned char USART_Receive(void);

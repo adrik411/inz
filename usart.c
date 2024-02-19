@@ -1,8 +1,8 @@
 /*
- * moj_usart.c
+ * sart.c
  *
- * Created: 06.04.2023 22:56:57
- *  Author: guzik
+ * Created: 29/12/2023 09:23:22
+ *  Author: ak
  */ 
 
 

@@ -165,7 +165,7 @@ float pomiar_adc_usredniony(uint8_t kanal, uint16_t ile_razy){
 
 float hz_na_um_fe(int32_t x){
 	
-	return 2.078 + (-9.88E-04*x) + (2.44E-07*pow(x,2)) + (-4.3E-11*pow(x,3)) + (3.33E-15*pow(x,4));                  
+	return 2.055 + (-9.88E-04*x) + (2.44E-07*pow(x,2)) + (-4.3E-11*pow(x,3)) + (3.33E-15*pow(x,4));                  
 	
 }
 

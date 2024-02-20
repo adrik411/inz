@@ -74,15 +74,15 @@ int main(void)
 			
 	        toggle = !(toggle);
 			if(!(startowe_HZ_prostokata) && pomiar_2 > 98500) startowe_HZ_prostokata = pomiar_2; // dla debugowania zapisuje początkową częstotlwiość
-			if(!(startowy_pomiar_adc)) startowy_pomiar_adc = pomiar_adc_usredniony(1,500); // dla debugowania zapisuje początkowe napięcie na wejściu analogowym (termistor)
+			if(!(startowy_pomiar_adc)) startowy_pomiar_adc = pomiar_adc_usredniony(0,500); // dla debugowania zapisuje początkowe napięcie na wejściu analogowym (termistor)
 			
-			pomiar_adc = pomiar_adc_usredniony(1,500);
+			pomiar_adc = pomiar_adc_usredniony(0,500);
 			roznica_adc = startowy_pomiar_adc - pomiar_adc; // od startowego pomiaru termistora robi róznice i na podstawie jej zmiany kompensuje Hz
 			
                 kompensacja_temp(roznica_adc, &kompensacja_hz);
 
 			
-			if(pomiar_2 <= (96969)){ // wykryta stal 
+			if(pomiar_2 <= (96969)){ // wykryta stal
 				
 				pomiar_2_c = pomiar_2 - (96969);
 				um = hz_na_um_fe(abs(pomiar_2_c+kompensacja_hz));
@@ -90,13 +90,13 @@ int main(void)
 				um = hz_na_um_fe(abs(pomiar_2_c+blad+kompensacja_hz));
 				printf("FE %d | ",blad);
 			}
-			else if (pomiar_2 >= (106700)) // wykryte aluminium / miedź
+			else if (pomiar_2 >= (106700)) // wykryte aluminium / miedz
 			{
 				
 				pomiar_2_c = pomiar_2 - (106700);
-				um = hz_na_um_al(abs(pomiar_2_c));
+				um = hz_na_um_al(abs(pomiar_2_c+kompensacja_hz));
 				int16_t blad = kalibracja_0_um_al(blad_zero_al,um);
-				um = hz_na_um_al(abs(pomiar_2_c+blad));
+				um = hz_na_um_al(abs(pomiar_2_c+blad+kompensacja_hz));
 				printf("AL %d | ",blad);;
 
 			}
@@ -108,9 +108,9 @@ int main(void)
 			printf("%ld startowe hz | ", startowe_HZ_prostokata);
 			printf("%ld hz | ", pomiar_2 );
 			printf("%ld hz roznica | ", pomiar_2_c );
-			printf("%.3F um | ", um );
+			printf("%.1F um | ", um*1000 );
 			printf("%d kompensacja hz | ", kompensacja_hz);
-			printf("Vthermo = %.3F\n", pomiar_adc_usredniony(1,800));
+			printf("Vthermo = %.3F\n", pomiar_adc_usredniony(0,800));
 			kompensacja_hz = 0;
 			}
 		
